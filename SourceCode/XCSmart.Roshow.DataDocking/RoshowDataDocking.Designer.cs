@@ -33,16 +33,13 @@
             this.gbDataDeal = new System.Windows.Forms.GroupBox();
             this.flpDataDealContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.gbDataDealForm = new System.Windows.Forms.GroupBox();
+            this.btnSubmit = new System.Windows.Forms.Button();
             this.btnDataDealUpload = new System.Windows.Forms.Button();
             this.txtDataDealFilePath = new System.Windows.Forms.TextBox();
             this.lblDataDealFilePath = new System.Windows.Forms.Label();
             this.plDataDealDataList = new System.Windows.Forms.Panel();
             this.gbDataDealList = new System.Windows.Forms.GroupBox();
             this.dgvDockingData = new System.Windows.Forms.DataGridView();
-            this.gbDataDocking = new System.Windows.Forms.GroupBox();
-            this.flpDataDocking = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnSubmit = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.PackCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OrderNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SystemModel = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,6 +48,9 @@
             this.Serial = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ModuleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CellCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gbDataDocking = new System.Windows.Forms.GroupBox();
+            this.flpDataDocking = new System.Windows.Forms.FlowLayoutPanel();
+            this.txtDockingResult = new System.Windows.Forms.TextBox();
             this.plContainer.SuspendLayout();
             this.flpMain.SuspendLayout();
             this.gbDataDeal.SuspendLayout();
@@ -114,6 +114,16 @@
             this.gbDataDealForm.TabIndex = 0;
             this.gbDataDealForm.TabStop = false;
             this.gbDataDealForm.Text = "数据上传";
+            // 
+            // btnSubmit
+            // 
+            this.btnSubmit.Location = new System.Drawing.Point(838, 23);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(75, 23);
+            this.btnSubmit.TabIndex = 3;
+            this.btnSubmit.Text = "提交数据";
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // btnDataDealUpload
             // 
@@ -180,43 +190,6 @@
             this.dgvDockingData.Size = new System.Drawing.Size(928, 587);
             this.dgvDockingData.TabIndex = 1;
             // 
-            // gbDataDocking
-            // 
-            this.gbDataDocking.Controls.Add(this.flpDataDocking);
-            this.gbDataDocking.Location = new System.Drawing.Point(952, 3);
-            this.gbDataDocking.Name = "gbDataDocking";
-            this.gbDataDocking.Size = new System.Drawing.Size(274, 720);
-            this.gbDataDocking.TabIndex = 4;
-            this.gbDataDocking.TabStop = false;
-            this.gbDataDocking.Text = "数据提交结果";
-            // 
-            // flpDataDocking
-            // 
-            this.flpDataDocking.Controls.Add(this.textBox1);
-            this.flpDataDocking.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flpDataDocking.Location = new System.Drawing.Point(3, 17);
-            this.flpDataDocking.Name = "flpDataDocking";
-            this.flpDataDocking.Size = new System.Drawing.Size(268, 700);
-            this.flpDataDocking.TabIndex = 1;
-            // 
-            // btnSubmit
-            // 
-            this.btnSubmit.Location = new System.Drawing.Point(838, 23);
-            this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(75, 23);
-            this.btnSubmit.TabIndex = 3;
-            this.btnSubmit.Text = "提交数据";
-            this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(3, 3);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(262, 694);
-            this.textBox1.TabIndex = 0;
-            // 
             // PackCode
             // 
             this.PackCode.DataPropertyName = "PackCode";
@@ -279,6 +252,33 @@
             this.CellCount.Name = "CellCount";
             this.CellCount.Width = 80;
             // 
+            // gbDataDocking
+            // 
+            this.gbDataDocking.Controls.Add(this.flpDataDocking);
+            this.gbDataDocking.Location = new System.Drawing.Point(952, 3);
+            this.gbDataDocking.Name = "gbDataDocking";
+            this.gbDataDocking.Size = new System.Drawing.Size(274, 720);
+            this.gbDataDocking.TabIndex = 4;
+            this.gbDataDocking.TabStop = false;
+            this.gbDataDocking.Text = "数据提交结果";
+            // 
+            // flpDataDocking
+            // 
+            this.flpDataDocking.Controls.Add(this.txtDockingResult);
+            this.flpDataDocking.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpDataDocking.Location = new System.Drawing.Point(3, 17);
+            this.flpDataDocking.Name = "flpDataDocking";
+            this.flpDataDocking.Size = new System.Drawing.Size(268, 700);
+            this.flpDataDocking.TabIndex = 1;
+            // 
+            // txtDockingResult
+            // 
+            this.txtDockingResult.Location = new System.Drawing.Point(3, 3);
+            this.txtDockingResult.Multiline = true;
+            this.txtDockingResult.Name = "txtDockingResult";
+            this.txtDockingResult.Size = new System.Drawing.Size(262, 694);
+            this.txtDockingResult.TabIndex = 0;
+            // 
             // RoshowDataDocking
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -319,7 +319,7 @@
         private System.Windows.Forms.GroupBox gbDataDealList;
         private System.Windows.Forms.DataGridView dgvDockingData;
         private System.Windows.Forms.Button btnSubmit;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtDockingResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn PackCode;
         private System.Windows.Forms.DataGridViewTextBoxColumn OrderNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn SystemModel;

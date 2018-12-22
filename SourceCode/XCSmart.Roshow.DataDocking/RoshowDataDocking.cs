@@ -18,14 +18,23 @@ namespace XCSmart.Roshow.DataDocking
 {
     public partial class RoshowDataDocking : Form
     {
+        /// <summary>
+        /// Excel 读取帮助类
+        /// </summary>
         private RoshowExcelHelper _roshowExcelHelperl;
+        /// <summary>
+        /// 数据对接帮助类
+        /// </summary>
+        private RoshowDataDockingHelper _roshowDataDockingHelper;
 
         public RoshowDataDocking()
         {
             InitializeComponent();
 
-            //
+            //excel解析类实例化
             _roshowExcelHelperl = new RoshowExcelHelper();
+            // 数据对接帮助类实例化
+            _roshowDataDockingHelper = new RoshowDataDockingHelper();
 
             //TODO:加密验证
         }
@@ -37,7 +46,7 @@ namespace XCSmart.Roshow.DataDocking
         {
             try
             {
-                //初始化一个OpenFileDialog类
+                // 初始化一个OpenFileDialog类
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 fileDialog.Filter = "Excle|*.xls;*.xlsx";
 
@@ -45,12 +54,12 @@ namespace XCSmart.Roshow.DataDocking
                 //判断用户是否正确的选择了文件
                 if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //获取用户选择的文件
+                    // 获取用户选择的文件
                     FileInfo fileInfo = new FileInfo(fileDialog.FileName);
 
-                    //显示文件名称到文本框
+                    // 显示文件名称到文本框
                     this.txtDataDealFilePath.Text = fileInfo.Name.Split('.')[0];
-
+                    // 进行Excel 数据的解析
                     _roshowExcelHelperl.GetRoshowExcelData(fileInfo);
 
                     // 进行展示数据的绑定
@@ -73,7 +82,14 @@ namespace XCSmart.Roshow.DataDocking
         /// <param name="e"></param>
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-
+            try
+            {                
+                this.txtDockingResult.Text = _roshowDataDockingHelper.DockingData(_roshowExcelHelperl.GetDockingData());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

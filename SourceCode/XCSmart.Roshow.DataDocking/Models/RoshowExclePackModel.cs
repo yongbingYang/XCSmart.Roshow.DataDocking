@@ -9,6 +9,16 @@ namespace XCSmart.Roshow.DataDocking.Models
     public class RoshowExclePackModel
     {
         /// <summary>
+        /// 电池包编码
+        /// </summary>
+        public string PackCode { get; set; }
+
+        /// <summary>
+        /// 电池包型号
+        /// </summary>
+        public string PackModel { get; set; }
+
+        /// <summary>
         /// 储能装置型号
         /// </summary>
         public string SystemModel { get; set; }
@@ -19,14 +29,10 @@ namespace XCSmart.Roshow.DataDocking.Models
         public string SystemCode { get; set; }
 
         /// <summary>
-        /// 电池包型号
+        /// 单体（电芯）型号
         /// </summary>
-        public string PackModel { get; set; }
+        public string CellModel { get; set; }
 
-        /// <summary>
-        /// 电池包编码
-        /// </summary>
-        public string PackCode { get; set; }
 
         /// <summary>
         /// 储能装置编号

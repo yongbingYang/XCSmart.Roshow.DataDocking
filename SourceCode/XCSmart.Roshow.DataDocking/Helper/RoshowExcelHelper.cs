@@ -38,6 +38,10 @@ namespace XCSmart.Roshow.DataDocking.Helper
         /// </summary>
         IWorkbook _workbook;
 
+        /// <summary>
+        /// 获取模版数据
+        /// </summary>
+        /// <param name="fileInfo"></param>
         public void GetRoshowExcelData(FileInfo fileInfo)
         {
             // 打开文件
@@ -54,7 +58,7 @@ namespace XCSmart.Roshow.DataDocking.Helper
                 }
 
 
-                if (_workbook.NumberOfSheets != 4)
+                if (_workbook.NumberOfSheets < 4)
                 {
                     IsVaild = false;
                     return;
@@ -69,7 +73,10 @@ namespace XCSmart.Roshow.DataDocking.Helper
             }
 
         }
-
+        /// <summary>
+        /// 获取模组电芯数据关系
+        /// </summary>
+        /// <param name="sheet">模组电芯数据工作簿</param>
         private void RoshowCellListBind(ISheet sheet)
         {
             _roshowCellList = new List<RoshowExcleCellModel>();
@@ -87,6 +94,10 @@ namespace XCSmart.Roshow.DataDocking.Helper
             }
         }
 
+        /// <summary>
+        /// 获取电池包模组数据关系
+        /// </summary>
+        /// <param name="sheet">电池包模组数据工作簿</param>
         private void RoshowModuleListBind(ISheet sheet)
         {
             _roshowModuleList = new List<RoshowExcleModuleModel>();
@@ -105,6 +116,10 @@ namespace XCSmart.Roshow.DataDocking.Helper
             }
         }
 
+        /// <summary>
+        /// 获取电池包数据
+        /// </summary>
+        /// <param name="sheet">电池包数据</param>
         private void RoshowPackListBind(ISheet sheet)
         {
             _roshowPackList = new List<RoshowExclePackModel>();
@@ -118,13 +133,18 @@ namespace XCSmart.Roshow.DataDocking.Helper
                         SystemModel = row.GetCell(0)?.ToString(),
                         SystemCode = row.GetCell(1)?.ToString(),
                         PackModel = row.GetCell(2)?.ToString(),
-                        PackCode = row.GetCell(3)?.ToString(),
-                        Serial = row.GetCell(4)?.ToString()
+                        CellModel = row.GetCell(3)?.ToString(),
+                        PackCode = row.GetCell(4)?.ToString(),
+                        Serial = row.GetCell(5)?.ToString()
                     });
                 }
             }
         }
 
+        /// <summary>
+        /// 获取订单信息
+        /// </summary>
+        /// <param name="sheet">订单数据的工作簿</param>
         private void RoshowOrderBind(ISheet sheet)
         {
             IRow row = sheet.GetRow(3);
@@ -151,20 +171,21 @@ namespace XCSmart.Roshow.DataDocking.Helper
         {
             List<RoshowPackModel> roshowPackModels = new List<RoshowPackModel>();
 
-            roshowPackModels = _roshowPackList.Select(pack =>
-             {
-                 return new RoshowPackModel
+            roshowPackModels = _roshowPackList
+                .Select(pack =>
                  {
-                     OrderNo = _roshowOrder.OrderNo,
-                     PackCode = pack.PackCode,
-                     PackModel = pack.PackModel,
-                     SystemModel = pack.SystemModel,
-                     SystemCode = pack.SystemCode,
-                     Serial = pack.Serial,
-                     ModuleList = GetBindModuleList(pack.PackCode)
-                 };
-             })
-            .ToList();
+                     return new RoshowPackModel
+                     {
+                         OrderNo = _roshowOrder.OrderNo,
+                         PackCode = pack.PackCode,
+                         PackModel = pack.PackModel,
+                         SystemModel = pack.SystemModel,
+                         SystemCode = pack.SystemCode,
+                         Serial = pack.Serial,
+                         ModuleList = GetBindModuleList(pack.PackCode)
+                     };
+                 })
+                .ToList();
 
             return roshowPackModels;
         }
@@ -190,6 +211,66 @@ namespace XCSmart.Roshow.DataDocking.Helper
             return _roshowCellList
                 .Where(cell => cell.ModuleCode == moduleCode)
                 .Select(cell => cell.CellCode)
+                .ToList();
+        }
+
+
+        /// <summary>
+        /// 获取对接数据
+        /// </summary>
+        /// <returns></returns>
+        public List<Dictionary<string, object>> GetDockingData()
+        {
+            return _roshowPackList
+                .Select(pack =>
+                {
+                    Dictionary<string, object> dicPack = new Dictionary<string, object>();
+
+                    //电池包编码
+                    dicPack.Add("code", pack.PackCode);
+
+                    //电池模组数据集
+                    IList<Dictionary<string, object>> moduleList = GetModuleDockingData(pack.PackCode, pack.CellModel);
+                    dicPack.Add("moduleList", moduleList);
+
+                    dicPack.Add("orderNo", _roshowOrder.OrderNo);              //订单号
+                    dicPack.Add("modelId", pack.PackModel);                    //电池包型号
+                    dicPack.Add("systemId", pack.SystemCode);                  //所属储能装置编码
+                    dicPack.Add("systemModelId", pack.SystemModel);            //储能装置型号
+                    dicPack.Add("serial", pack.Serial);                        //储能装置中的编号
+
+                    return dicPack;
+                })
+              .ToList();
+
+        }
+
+        private IList<Dictionary<string, object>> GetModuleDockingData(string packCode, string cellModel)
+        {
+            return _roshowModuleList
+                .Where(module => module.PackCode == packCode)
+                .Select(module =>
+                {
+                    Dictionary<string, object> dicModule = new Dictionary<string, object>();
+
+                    //电池包模组
+                    string moduleCode = module.ModuleCode;
+                    dicModule.Add("code", moduleCode);
+
+                    //电池单体数据集
+                    IList<string> cellList = _roshowCellList
+                          .Where(cell => cell.ModuleCode == module.ModuleCode)
+                          .Select(cell => cell.CellCode)
+                          .ToList();
+
+                    dicModule.Add("cellList", cellList);
+                    //模块型号
+                    dicModule.Add("modelId", module.ModuleModel);
+                    //单体型号
+                    dicModule.Add("cellModelId", cellModel);
+
+                    return dicModule;
+                })
                 .ToList();
         }
     }
