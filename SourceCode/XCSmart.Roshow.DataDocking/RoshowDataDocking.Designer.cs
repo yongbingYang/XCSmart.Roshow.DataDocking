@@ -117,6 +117,7 @@
             // 
             // btnSubmit
             // 
+            this.btnSubmit.Enabled = false;
             this.btnSubmit.Location = new System.Drawing.Point(838, 23);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(75, 23);

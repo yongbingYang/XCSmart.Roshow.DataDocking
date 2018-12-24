@@ -39,6 +39,11 @@ namespace XCSmart.Roshow.DataDocking
             //TODO:加密验证
         }
 
+        private void LicenseCheck()
+        {
+
+        }
+
         /// <summary>
         /// 进行excel数据文件的上传选择
         /// </summary>
@@ -65,6 +70,9 @@ namespace XCSmart.Roshow.DataDocking
                     // 进行展示数据的绑定
                     dgvDockingData.DataSource = _roshowExcelHelperl.GetBindData();
 
+                    //更改提交按钮的状态为可用
+                    this.btnSubmit.Enabled = true;
+
                 }
             }
             catch (Exception ex)
@@ -83,8 +91,11 @@ namespace XCSmart.Roshow.DataDocking
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 this.txtDockingResult.Text = _roshowDataDockingHelper.DockingData(_roshowExcelHelperl.GetDockingData());
+
+                //数据上传完成后禁用提交按钮
+                this.btnSubmit.Enabled = false;
             }
             catch (Exception ex)
             {
