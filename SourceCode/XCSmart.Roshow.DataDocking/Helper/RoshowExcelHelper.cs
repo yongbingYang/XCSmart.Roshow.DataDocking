@@ -80,11 +80,25 @@ namespace XCSmart.Roshow.DataDocking.Helper
         private void RoshowCellListBind(ISheet sheet)
         {
             _roshowCellList = new List<RoshowExcleCellModel>();
-            for (int j = 3; j <= sheet.LastRowNum; j++)  //LastRowNum 是当前表的总行数
+            for (int i = 3; i <= sheet.LastRowNum; i++)  //LastRowNum 是当前表的总行数
             {
-                IRow row = sheet.GetRow(j);  //读取当前行数据
+                IRow row = sheet.GetRow(i);  //读取当前行数据
                 if (row != null)
                 {
+                    bool isVaild = true;
+
+                    // 进行行数据的验证
+                    for (int j = 0; j < row.LastCellNum; j++)
+                    {
+                        if (string.IsNullOrEmpty(row.GetCell(j)?.ToString()))
+                        {
+                            isVaild = false;
+                            break;
+                        }
+                    }
+                    // 如果行数据 存在异常 跳过行
+                    if (!isVaild) continue;
+
                     _roshowCellList.Add(new RoshowExcleCellModel
                     {
                         ModuleCode = row.GetCell(0).ToString(),
@@ -106,6 +120,20 @@ namespace XCSmart.Roshow.DataDocking.Helper
                 IRow row = sheet.GetRow(j);  //读取当前行数据
                 if (row != null)
                 {
+                    bool isVaild = true;
+
+                    // 进行行数据的验证
+                    for (int i = 0; i < row.LastCellNum; i++)
+                    {
+                        if (string.IsNullOrEmpty(row.GetCell(i)?.ToString()))
+                        {
+                            isVaild = false;
+                            break;
+                        }
+                    }
+                    // 如果行数据 存在异常 跳过行
+                    if (!isVaild) continue;
+
                     _roshowModuleList.Add(new RoshowExcleModuleModel
                     {
                         PackCode = row.GetCell(0)?.ToString(),
@@ -128,6 +156,19 @@ namespace XCSmart.Roshow.DataDocking.Helper
                 IRow row = sheet.GetRow(j);  //读取当前行数据
                 if (row != null)
                 {
+                    bool isVaild = true;
+                    // 进行行数据的验证
+                    for (int i = 0; i < row.LastCellNum; i++)
+                    {
+                        if (string.IsNullOrEmpty(row.GetCell(i)?.ToString()))
+                        {
+                            isVaild = false;
+                            break;
+                        }
+                    }
+                    // 如果行数据 存在异常 跳过行
+                    if (!isVaild) continue;
+
                     _roshowPackList.Add(new RoshowExclePackModel
                     {
                         SystemModel = row.GetCell(0)?.ToString(),
